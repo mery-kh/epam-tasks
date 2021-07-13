@@ -10,8 +10,8 @@ let msgs = [];
 if(argv.addUser) {
     users.push(argv.addUser)
 }
-if(argv.addMessage) {
-    msgs.push(argv.addMessage)
+if(argv.message) {
+    msgs.push(argv.message)
 }
 logger.on('message', (...msg) => {
     msgs.push(msg);
