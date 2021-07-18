@@ -22,4 +22,3 @@ rl.question('Path... ', (answer) => {
     rl.close();
 });
 
-
