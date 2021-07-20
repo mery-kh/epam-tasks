@@ -1,0 +1,4 @@
+
+ls -lh
+#pwd
+#find /
