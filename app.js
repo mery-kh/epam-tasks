@@ -6,12 +6,24 @@ function factorial(n) {
     return 1;
 }
 if(cluster.isMaster){
+    let worker;
     for(let i = 0; i < 2; i++){
-      cluster.fork();
+        worker = cluster.fork();
+    }
+    console.log(cluster.workers)
+    worker.on('message', msg => {
+        console.log(`${msg.n}! = ${msg.res}  [${process.pid}]`);
+    });
+    for (let id in cluster.workers) {
+        cluster.workers[id].send({ n: 50});
     }
     cluster.on('exit', (worker, code, signal) => console.log(`Worker ${worker.process.pid} died`));
 }
 else{
-    console.log(` ${factorial(50)} [${process.pid}]`);
-    process.exit(0);
+    process.on('message', msg => {
+        process.send({
+            n: msg.n,
+            res: factorial(msg.n)
+        });
+    });
 }
