@@ -10,12 +10,12 @@ app.use(express.json());
 
 let users = JSON.parse(fs.readFileSync(usersJsonPath, 'utf-8'));
 
-app.get('/users', (req, res) => {
-    if (users) {
+app.get('/api/v1/users', async (req, res) => {
+    if (await users) {
         res.status(200).json({
             status: 'success',
             data: users
-        })
+        });
     }
     else {
         res.status(404).json({
@@ -25,8 +25,8 @@ app.get('/users', (req, res) => {
     }
 });
 
-app.get('/users/:id', (req, res) => {
-    let user = users.find(({id}) => id === req.params.id);
+app.get('/api/v1/users/:id', async (req, res) => {
+    let user = await users.find(({id}) => id === req.params.id);
     if (user) {
         res.status(200).json({
             status: 'success',
@@ -41,11 +41,11 @@ app.get('/users/:id', (req, res) => {
     }
 });
 
-app.post('/users',(req, res) => {
+app.post('/api/v1/users',async (req, res) => {
     const newId = (+users[users.length - 1].id + 1).toString();
     const newUser = Object.assign({id: newId}, req.body);
     users.push(newUser);
-    fs.writeFile(usersJsonPath, JSON.stringify(users),
+    await fs.writeFile(usersJsonPath, JSON.stringify(users),
         err => {
             res.status(201).json({
                 status: 'success',
@@ -57,13 +57,11 @@ app.post('/users',(req, res) => {
     );
 });
 
-app.put('/users/:id',  (req, res) => {
-        let user = users.find(({id}) => id === req.params.id);
+app.put('/api/v1/users/:id',  async (req, res) => {
+        let user = await users.find(({id}) => id === req.params.id);
         if (user) {
-            console.log(user);
             user.name = req.body.name;
-            console.log(user)
-             fs.writeFile(usersJsonPath,JSON.stringify(users),
+             await fs.writeFile(usersJsonPath,JSON.stringify(users),
                      err => {
                  res.status(201).json({
                      status: 'success',
@@ -79,14 +77,14 @@ app.put('/users/:id',  (req, res) => {
             });
         }
 });
-app.delete('/users/:id', async (req, res) => {
-    let user = users.find(({id}) => id === req.params.id);
+app.delete('/api/v1/users/:id', async (req, res) => {
+    let user = await users.find(({id}) => id === req.params.id);
     if (user) {
         const index = users.indexOf(user);
         if (index > -1) {
             users.splice(index, 1);
         }
-        fs.writeFile(usersJsonPath, JSON.stringify(users),
+        await fs.writeFile(usersJsonPath, JSON.stringify(users),
             (err) => {
                 if (err) console.error(err)
             });
