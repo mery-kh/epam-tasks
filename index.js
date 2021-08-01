@@ -102,3 +102,9 @@ app.delete('/api/v1/users/:id', async (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening at port ${port}`));
+
+// Reviewer Armen
+//1) Should validate name coming from req.body for not to receive number or etc.
+//2) app.delete will be better with filter method, it's more fast
+//3) const newId = (+users[users.length - 1].id + 1).toString(); Id can be number also
+//4) It should be better to do with writeFileSync in app.post
