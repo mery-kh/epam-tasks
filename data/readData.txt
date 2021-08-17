@@ -1,0 +1,3 @@
+name=cake
+image.width=200
+image.height=1000

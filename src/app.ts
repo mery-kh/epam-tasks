@@ -1,17 +1,14 @@
-import express, {Express, Response, Request} from 'express';
+import {Express, Response, Request} from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
-const cron = require('node-cron');
-const sendEmail = require('./utils/email');
-// const userRouter = require('./routes/userRoutes');
+const blogRoutes = require('./routes/blog.routes');
+const rwRoutes = require('./routes/read-write.routes');
 dotenv.config();
 export const PORT = process.env.PORT || 4000;
 export const getApp = (): Express => {
     const app = express();
-    app.disable('x-powered-by');
     app.use(express.json());
-    // app.use('/api/v1/users/', userRouter);
-    cron.schedule('*/5 * * * * ', async function () {
-        await sendEmail();
-    });
+    app.use('/api/v1/blogs/', blogRoutes);
+    app.use('/api/v1/read-write/', rwRoutes)
     return app;
 };
